@@ -78,10 +78,10 @@ for G=1%:length(Groups)
             
             % Find start of each burst
             tmpS=D_amp1;
-            idxl = tmpS>=T1R;         % CHANGE THE VALUE DEPENDING ON L OR R
+            idxl = tmpS>=T1L;         % CHANGE THE VALUE DEPENDING ON L OR R
             idxl(1) = 0;
             idx = find(idxl);
-            yest = tmpS(idx-1)<T1R;    % CHANGE THE VALUE DEPENDING ON L OR R
+            yest = tmpS(idx-1)<T1L;    % CHANGE THE VALUE DEPENDING ON L OR R
             st1k=idx(yest);
             
             % Set some more variables
@@ -97,8 +97,8 @@ for G=1%:length(Groups)
             for k=1:length(st1k)
                 st=st1k(k);
                 
-                if ~isempty(find(D_amp1(st:end)<T1R))   % CHANGE THE VALUE DEPENDING ON L OR R
-                    edt=find(D_amp1(st:end)<T1R); % CHANGE THE VALUE DEPENDING ON L OR R
+                if ~isempty(find(D_amp1(st:end)<T1L))   % CHANGE THE VALUE DEPENDING ON L OR R
+                    edt=find(D_amp1(st:end)<T1L); % CHANGE THE VALUE DEPENDING ON L OR R
                     % -2 fence post problem and also wanting point
                     % above threshold (inside)
                     ed=edt(1)+st-2;
@@ -107,17 +107,24 @@ for G=1%:length(Groups)
                 end
                 ed1k(k)=ed;
                 
+                  if st>ed
+                    continue;
+                else
+                
                 % Get max peak height and location
                 amp=D_amp1(st:ed);
-                %[BurstHeight1(k),In]=max(amp);
-                %Ina=In+st-1;
+                [BurstHeight1(k),In]=max(amp);
+                Ina=In+st-1;
                 BurstLength1(k)=abs(ed1k(k)-st1k(k)); %sometimes negative value? Hence the Abs
+                  end
             end
             
             numburst(u,1) = length(st1k);
             datasegmentsecs(u,1) = length(D_amp1)/250;
             Burstrate(u,1) = numburst(u,1)/datasegmentsecs(u,1);
             Blen(u,1) = mean(BurstLength1); %mean length for all bursts in a minute
+            Bht(u,1) = mean(BurstHeight1);
+            
             clear tmpS k In Ina st1k ed edt yest ed1k
             %% Cortical 1 Electrode (+8-9)
             
@@ -126,10 +133,10 @@ for G=1%:length(Groups)
             
             % Find start of each burst
             tmpS=D_amp2;
-            idxl = tmpS>=T2R;  % CHANGE THE VALUE DEPENDING ON L OR R
+            idxl = tmpS>=T2L;  % CHANGE THE VALUE DEPENDING ON L OR R
             idxl(1) = 0;
             idx = find(idxl);
-            yest = tmpS(idx-1)<T2R;  % CHANGE THE VALUE DEPENDING ON L OR R
+            yest = tmpS(idx-1)<T2L;  % CHANGE THE VALUE DEPENDING ON L OR R
             st1k=idx(yest);
             
             % Set some more variables
@@ -145,8 +152,8 @@ for G=1%:length(Groups)
             for k=1:length(st1k)
                 st=st1k(k);
                 
-                if ~isempty(find(D_amp2(st:end)<T2R))  % CHANGE THE VALUE DEPENDING ON L OR R
-                    edt=find(D_amp2(st:end)<T2R);   % CHANGE THE VALUE DEPENDING ON L OR R
+                if ~isempty(find(D_amp2(st:end)<T2L))  % CHANGE THE VALUE DEPENDING ON L OR R
+                    edt=find(D_amp2(st:end)<T2L);   % CHANGE THE VALUE DEPENDING ON L OR R
                     % -2 fence post problem and also wanting point
                     % above threshold (inside)
                     ed=edt(1)+st-2;
@@ -155,17 +162,25 @@ for G=1%:length(Groups)
                 end
                 ed1k(k)=ed;
                 
+                 if st>ed
+                    continue;
+                else
+                
                 % Get max peak height and location
                 amp=D_amp2(st:ed);
-               % [BurstHeight2(k),In]=max(amp);
-               % Ina=In+st-1;
+               [BurstHeight2(k),In]=max(amp);
+               Ina=In+st-1;
                 BurstLength2(k)=abs(ed1k(k)-st1k(k)); %sometimes negative value? Hence the Abs
+
+                 end
             end
             
             numburst(u,2) = length(st1k);
             datasegmentsecs(u,2) = length(D_amp2)/250;
             Burstrate(u,2) = (numburst(u,2)/datasegmentsecs(u,2));
             Blen(u,2) = mean(BurstLength2); %mean length for all bursts in a minut
+            Bht(u,2) = mean(BurstHeight2);
+
 
             clear tmpS k In Ina st1k ed edt yest ed1k
             
@@ -176,10 +191,10 @@ for G=1%:length(Groups)
             
             % Find start of each burst
             tmpS=D_amp3;
-            idxl = tmpS>=T3R;  % CHANGE THE VALUE DEPENDING ON L OR R
+            idxl = tmpS>=T3L;  % CHANGE THE VALUE DEPENDING ON L OR R
             idxl(1) = 0;
             idx = find(idxl);
-            yest = tmpS(idx-1)<T3R;  % CHANGE THE VALUE DEPENDING ON L OR R
+            yest = tmpS(idx-1)<T3L;  % CHANGE THE VALUE DEPENDING ON L OR R
             st1k=idx(yest);
             
             % Set some more variables
@@ -195,8 +210,8 @@ for G=1%:length(Groups)
             for k=1:length(st1k)
                 st=st1k(k);
                 
-                if ~isempty(find(D_amp3(st:end)<T3R))  % CHANGE THE VALUE DEPENDING ON L OR R
-                    edt=find(D_amp3(st:end)<T3R);  % CHANGE THE VALUE DEPENDING ON L OR R
+                if ~isempty(find(D_amp3(st:end)<T3L))  % CHANGE THE VALUE DEPENDING ON L OR R
+                    edt=find(D_amp3(st:end)<T3L);  % CHANGE THE VALUE DEPENDING ON L OR R
                     % -2 fence post problem and also wanting point
                     % above threshold (inside)
                     ed=edt(1)+st-2;
@@ -205,18 +220,25 @@ for G=1%:length(Groups)
                 end
                 ed1k(k)=ed;
                 
-                % Get max peak height and location
                 
-                amp=D_amp3(st:ed);
-                % [BurstHeight3(k),In]=max(amp);
-                % Ina=In+st-1;
-                BurstLength3(k)=abs(ed1k(k)-st1k(k));  %sometimes negative value? Hence the Abs
+                if st>ed
+                    continue;
+                else
+                 
+                % Get max peak height and location                
+                amp=D_amp3(st:ed);                  
+                [BurstHeight3(k),In]=max(amp);
+                Ina=In+st-1;
+                BurstLength3(k)=abs(ed1k(k)-st1k(k));
+                end
             end
             
             numburst(u,3) = length(st1k);
             datasegmentsecs(u,3) = length(D_amp3)/250;
             Burstrate(u,3) = numburst(u,3)/datasegmentsecs(u,3);
             Blen(u,3) = mean(BurstLength3); %mean length for all bursts in a minut
+            Bht(u,3) = mean(BurstHeight3);
+
         
             clear tmpS k Ina In st1k ed edt yest ed1k
         end %minute
@@ -224,6 +246,7 @@ for G=1%:length(Groups)
         totminOFF = totminOFF+u;
        BrateOFF{G}= cat(1,BrateOFF{G}(:,:),Burstrate);
        BlenOFF{G}=cat(1,BlenOFF{G}(:,:),Blen);
+       BhtOFF{G}=cat(1,BhtOFF{G}(:,:),Bht);
     end % file
     %BR = 
 end% Group
@@ -231,7 +254,7 @@ end% Group
 clear Blen Burstrate 
 %% ON files
 
-for G=2%:length(Groups)
+for G=1%:length(Groups)
     load(sprintf('%s/%s/StimSess_final.mat',InDir,Groups{G}));
     ONfiles  = StimSess(:,1);
     OFFfiles = StimSess(:,2);
@@ -294,10 +317,10 @@ for G=2%:length(Groups)
             
             % Find start of each burst
             tmpS=D_amp1;
-            idxl = tmpS>=T1R;         % CHANGE THE VALUE DEPENDING ON L OR R
+            idxl = tmpS>=T1L;         % CHANGE THE VALUE DEPENDING ON L OR R
             idxl(1) = 0;
             idx = find(idxl);
-            yest = tmpS(idx-1)<T1R;    % CHANGE THE VALUE DEPENDING ON L OR R
+            yest = tmpS(idx-1)<T1L;    % CHANGE THE VALUE DEPENDING ON L OR R
             st1k=idx(yest);
             
             % Set some more variables
@@ -313,8 +336,8 @@ for G=2%:length(Groups)
             for k=1:length(st1k)
                 st=st1k(k);
                 
-                if ~isempty(find(D_amp1(st:end)<T1R))   % CHANGE THE VALUE DEPENDING ON L OR R
-                    edt=find(D_amp1(st:end)<T1R); % CHANGE THE VALUE DEPENDING ON L OR R
+                if ~isempty(find(D_amp1(st:end)<T1L))   % CHANGE THE VALUE DEPENDING ON L OR R
+                    edt=find(D_amp1(st:end)<T1L); % CHANGE THE VALUE DEPENDING ON L OR R
                     % -2 fence post problem and also wanting point
                     % above threshold (inside)
                     ed=edt(1)+st-2;
@@ -323,17 +346,24 @@ for G=2%:length(Groups)
                 end
                 ed1k(k)=ed;
                 
+                     
+                if st>ed
+                    continue;
+                else
+                
                 % Get max peak height and location
                 amp=D_amp1(st:ed);
-%                 [BurstHeight1(k),In]=max(amp);
-%                 Ina=In+st-1;
+                [BurstHeight1(k),In]=max(amp);
+                Ina=In+st-1;
                 BurstLength1(k)=abs(ed1k(k)-st1k(k));
+                end
             end
             
             numburst(u,1) = length(st1k);
             datasegmentsecs(u,1) = length(D_amp1)/250;
             Burstrate(u,1) = numburst(u,1)/datasegmentsecs(u,1);
             Blen(u,1) = mean(BurstLength1); %mean length for all bursts in a minute
+            Bht(u,1) = mean(BurstHeight1);
 
             
             clear tmpS k In Ina st1k ed edt yest ed1k
@@ -344,10 +374,10 @@ for G=2%:length(Groups)
             
             % Find start of each burst
             tmpS=D_amp2;
-            idxl = tmpS>=T2R;  % CHANGE THE VALUE DEPENDING ON L OR R
+            idxl = tmpS>=T2L;  % CHANGE THE VALUE DEPENDING ON L OR R
             idxl(1) = 0;
             idx = find(idxl);
-            yest = tmpS(idx-1)<T2R;  % CHANGE THE VALUE DEPENDING ON L OR R
+            yest = tmpS(idx-1)<T2L;  % CHANGE THE VALUE DEPENDING ON L OR R
             st1k=idx(yest);
             
             % Set some more variables
@@ -363,8 +393,8 @@ for G=2%:length(Groups)
             for k=1:length(st1k)
                 st=st1k(k);
                 
-                if ~isempty(find(D_amp2(st:end)<T2R))  % CHANGE THE VALUE DEPENDING ON L OR R
-                    edt=find(D_amp2(st:end)<T2R);   % CHANGE THE VALUE DEPENDING ON L OR R
+                if ~isempty(find(D_amp2(st:end)<T2L))  % CHANGE THE VALUE DEPENDING ON L OR R
+                    edt=find(D_amp2(st:end)<T2L);   % CHANGE THE VALUE DEPENDING ON L OR R
                     % -2 fence post problem and also wanting point
                     % above threshold (inside)
                     ed=edt(1)+st-2;
@@ -374,10 +404,15 @@ for G=2%:length(Groups)
                 ed1k(k)=ed;
                 
                 % Get max peak height and location
+                     
+                if st>ed
+                    continue;
+                else
                 amp=D_amp2(st:ed);
-%                 [BurstHeight2(k),In]=max(amp);
-%                 Ina=In+st-1;
+                [BurstHeight2(k),In]=max(amp);
+                Ina=In+st-1;
                 BurstLength2(k)=abs(ed1k(k)-st1k(k)); %negatice value sometimes
+                end
             end
             
             Blen(u,2) = mean(BurstLength2); %mean length for all bursts in a minute
@@ -385,7 +420,8 @@ for G=2%:length(Groups)
             numburst(u,2) = length(st1k);
             datasegmentsecs(u,2) = length(D_amp2)/250;
             Burstrate(u,2) = (numburst(u,2)/datasegmentsecs(u,2));
-            
+            Bht(u,2) = mean(BurstHeight2);
+
             clear tmpS k In Ina st1k ed edt yest ed1k
             
             %% Cortical 2 Electrode (+10-11)
@@ -395,10 +431,10 @@ for G=2%:length(Groups)
             
             % Find start of each burst
             tmpS=D_amp3;
-            idxl = tmpS>=T3R;  % CHANGE THE VALUE DEPENDING ON L OR R
+            idxl = tmpS>=T3L;  % CHANGE THE VALUE DEPENDING ON L OR R
             idxl(1) = 0;
             idx = find(idxl);
-            yest = tmpS(idx-1)<T3R;  % CHANGE THE VALUE DEPENDING ON L OR R
+            yest = tmpS(idx-1)<T3L;  % CHANGE THE VALUE DEPENDING ON L OR R
             st1k=idx(yest);
             
             % Set some more variables
@@ -414,8 +450,8 @@ for G=2%:length(Groups)
             for k=1:length(st1k)
                 st=st1k(k);
                 
-                if ~isempty(find(D_amp3(st:end)<T3R))  % CHANGE THE VALUE DEPENDING ON L OR R
-                    edt=find(D_amp3(st:end)<T3R);  % CHANGE THE VALUE DEPENDING ON L OR R
+                if ~isempty(find(D_amp3(st:end)<T3L))  % CHANGE THE VALUE DEPENDING ON L OR R
+                    edt=find(D_amp3(st:end)<T3L);  % CHANGE THE VALUE DEPENDING ON L OR R
                     % -2 fence post problem and also wanting point
                     % above threshold (inside)
                     ed=edt(1)+st-2;
@@ -425,18 +461,23 @@ for G=2%:length(Groups)
                 ed1k(k)=ed;
                 
                 % Get max peak height and location
-                
+                     
+                if st>ed
+                    continue;
+                else
                 amp=D_amp3(st:ed);
-%                 [BurstHeight3(k),In]=max(amp);
-%                 Ina=In+st-1;
+                [BurstHeight3(k),In]=max(amp);
+                Ina=In+st-1;
                 BurstLength3(k)=abs(ed1k(k)-st1k(k));
+                end
             end
             
             numburst(u,3) = length(st1k);
             datasegmentsecs(u,3) = length(D_amp3)/250;
             Burstrate(u,3) = numburst(u,3)/datasegmentsecs(u,3);
             Blen(u,3) = mean(BurstLength3);
-            
+            Bht(u,3) = mean(BurstHeight3);
+
             clear tmpS k Ina In st1k ed edt yest ed1k
         end %minute
         
@@ -444,6 +485,7 @@ for G=2%:length(Groups)
         totminON = totminON+u;
        BrateON{G}= cat(1,BrateON{G}(:,:),Burstrate);
        BlenON{G}=cat(1,BlenON{G}(:,:),Blen);
+       BhtON{G}=cat(1,BhtON{G}(:,:),Bht);
 
        
     end % file
@@ -452,7 +494,7 @@ end% Group
 
 %% Stats
 
-[h1 p1] = ttest2(rmmissing(BrateOFF{1,1}(:,1)),(rmmissing(BrateON{1,1}(:,1)))); %LEFT
+[h1 p1] = ttest2((BrateOFF{1,1}(:,1)),(BrateON{1,1}(:,1))); %LEFT
 [h2 p2] = ttest2(rmmissing(BlenOFF{1,1}(:,1)),(rmmissing(BlenON{1,1}(:,1))));   %LEFT
 %[h3 p3] = ttest2(rmmissing(BhtOFF{1,1}(:,1)),(rmmissing(BhtON{1,1}(:,1)))); %LEFT
 
