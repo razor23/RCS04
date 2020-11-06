@@ -22,7 +22,7 @@ totminOFF=0;
 
 %% OFF files
 
-for G=1%:length(Groups)
+for G=1%:length(Groups)  % Change depenfind on LEFT or RIGHT
     load(sprintf('%s/%s/StimSess_final.mat',InDir,Groups{G}));
     ONfiles  = StimSess(:,1);
     OFFfiles = StimSess(:,2);
@@ -237,9 +237,7 @@ for G=1%:length(Groups)
             datasegmentsecs(u,3) = length(D_amp3)/250;
             Burstrate(u,3) = numburst(u,3)/datasegmentsecs(u,3);
             Blen(u,3) = mean(BurstLength3); %mean length for all bursts in a minut
-            Bht(u,3) = mean(BurstHeight3);
-
-        
+            Bht(u,3) = mean(BurstHeight3);        
             clear tmpS k Ina In st1k ed edt yest ed1k
         end %minute
         clear Data
@@ -479,8 +477,7 @@ for G=1%:length(Groups)
             Bht(u,3) = mean(BurstHeight3);
 
             clear tmpS k Ina In st1k ed edt yest ed1k
-        end %minute
-        
+        end %minute        
         clear Data
         totminON = totminON+u;
        BrateON{G}= cat(1,BrateON{G}(:,:),Burstrate);
@@ -494,10 +491,29 @@ end% Group
 
 %% Stats
 
-[h1 p1] = ttest2((BrateOFF{1,1}(:,1)),(BrateON{1,1}(:,1))); %LEFT
-[h2 p2] = ttest2(rmmissing(BlenOFF{1,1}(:,1)),(rmmissing(BlenON{1,1}(:,1))));   %LEFT
-%[h3 p3] = ttest2(rmmissing(BhtOFF{1,1}(:,1)),(rmmissing(BhtON{1,1}(:,1)))); %LEFT
+[h11 p11] = ttest2((BrateOFF{1,1}(:,1)),(BrateON{1,1}(:,1))); %LEFT
+[h21 p21] = ttest2(rmmissing(BlenOFF{1,1}(:,1)),(rmmissing(BlenON{1,1}(:,1))));   %LEFT
+[h31 p31] = ttest2(rmmissing(BhtOFF{1,1}(:,1)),(rmmissing(BhtON{1,1}(:,1)))); %LEFT
 
-[h4 p4] = ttest2(rmmissing(BrateOFF{1,1}(:,1)),(rmmissing(BrateON{1,1}(:,1)))); %RIGHT
-[h5 p5] = ttest2(rmmissing(BlenOFF{1,1}(:,1)),(rmmissing(BlenON{1,1}(:,1)))); %RIGTH
-%[h6 p6] = ttest2(rmmissing(BhtOFF{1,1}(:,1)),(rmmissing(BhtON{1,1}(:,1)))); %RIGHT
+[h21 p21] = ttest2((BrateOFF{1,1}(:,2)),(BrateON{1,1}(:,2))); %LEFT
+[h22 p22] = ttest2(rmmissing(BlenOFF{1,1}(:,2)),(rmmissing(BlenON{1,1}(:,2))));   %LEFT
+[h23 p23] = ttest2(rmmissing(BhtOFF{1,1}(:,2)),(rmmissing(BhtON{1,1}(:,2)))); %LEFT
+
+[h31 p31] = ttest2((BrateOFF{1,1}(:,3)),(BrateON{1,1}(:,3))); %LEFT
+[h32 p32] = ttest2(rmmissing(BlenOFF{1,1}(:,3)),(rmmissing(BlenON{1,1}(:,3))));   %LEFT
+[h33 p33] = ttest2(rmmissing(BhtOFF{1,1}(:,3)),(rmmissing(BhtON{1,1}(:,3)))); %LEFT
+
+
+
+
+[h34 p34] = ttest2(rmmissing(BrateOFF{1,2}(:,1)),(rmmissing(BrateON{1,2}(:,1)))); %RIGHT
+[h35 p35] = ttest2(rmmissing(BlenOFF{1,2}(:,1)),(rmmissing(BlenON{1,2}(:,1)))); %RIGTH
+[h36 p36] = ttest2(rmmissing(BhtOFF{1,2}(:,1)),(rmmissing(BhtON{1,2}(:,1)))); %RIGHT
+
+[h41 p41] = ttest2(rmmissing(BrateOFF{1,2}(:,2)),(rmmissing(BrateON{1,2}(:,2)))); %RIGHT
+[h42 p42] = ttest2(rmmissing(BlenOFF{1,2}(:,2)),(rmmissing(BlenON{1,2}(:,2)))); %RIGTH
+[h43 p43] = ttest2(rmmissing(BhtOFF{1,2}(:,2),(rmmissing(BhtON{1,2}(:,2))))); %RIGHT
+
+[h51 p51] = ttest2(rmmissing(BrateOFF{1,2}(:,3)),(rmmissing(BrateON{1,2}(:,3)))); %RIGHT
+[h52 p52] = ttest2(rmmissing(BlenOFF{1,2}(:,3)),(rmmissing(BlenON{1,2}(:,3)))); %RIGTH
+[h53 p53] = ttest2(rmmissing(BhtOFF{1,2}(:,3)),(rmmissing(BhtON{1,2}(:,3)))); %RIGHT
