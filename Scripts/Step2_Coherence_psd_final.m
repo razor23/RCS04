@@ -25,7 +25,7 @@ fs =250;
 
 for G=1:length(Groups)
     load(sprintf('%s/%s/database_from_device_settings.mat',InDir,Groups{G}));
-    z=1;x=1;k=1;
+    z=1;x=1;k=1;r=1;
     daterror=0;
     lengtherror=0;
     channelerror=0;
@@ -201,15 +201,15 @@ for G=1:length(Groups)
             
             l = 250*i*60;
             
-            [Data.cxy(:,i),Data.fone(:,i)]=mscohere(ftemp0(s:l),ftemp2(s:l),fs,fs/2,[1:60],fs);
-            [Data.cyz(:,i),Data.fone(:,i)]=mscohere(ftemp0(s:l),ftemp3(s:l),fs,fs/2,[1:60],fs);
-            [Data.czx(:,i),Data.fone(:,i)]=mscohere(ftemp2(s:l),ftemp3(s:l),fs,fs/2,[1:60],fs);
+            [Data.cxy(:,i),Data.fone(:,i)]=mscohere(ftemp0(s:l),ftemp2(s:l),fs,fs/2,[1:90],fs);
+            [Data.cyz(:,i),Data.fone(:,i)]=mscohere(ftemp0(s:l),ftemp3(s:l),fs,fs/2,[1:90],fs);
+            [Data.czx(:,i),Data.fone(:,i)]=mscohere(ftemp2(s:l),ftemp3(s:l),fs,fs/2,[1:90],fs);
             
             s = l+1;
             
             end
             
-            clear i
+           clear i
                        
              %% PSDs of the 1 minute chunks
             
@@ -218,14 +218,16 @@ for G=1:length(Groups)
              s=1;
              for i=1:(floor(size(ftemp0,1)/(250*60)))
              l = 250*i*60;  
-             [Data.psd0(:,i),Data.h1(:,i)] = pwelch(temp0(s:l),fs*5,fs,[1:60],fs);
-             [Data.psd2(:,i),Data.h2(:,i)] = pwelch(temp2(s:l),fs*5,fs,[1:60],fs);
-             [Data.psd3(:,i),Data.h3(:,i)] = pwelch(temp3(s:l),fs*5,fs,[1:60],fs);
+             [Data.psd0(:,i),Data.h1(:,i)] = pwelch(temp0(s:l),fs*5,fs,[1:90],fs);
+             [Data.psd2(:,i),Data.h2(:,i)] = pwelch(temp2(s:l),fs*5,fs,[1:90],fs);
+             [Data.psd3(:,i),Data.h3(:,i)] = pwelch(temp3(s:l),fs*5,fs,[1:90],fs);
              s = l+1;
              end
 
             if onoff==1
             TotalONminutes = i+TotalONminutes;
+            ONsessbymin{r,1} = floor(size(ftemp0,1)/(250*60));
+            r=r+1;
             else
             TotalOFFminutes = i+TotalOFFminutes;
             end
@@ -236,7 +238,7 @@ for G=1:length(Groups)
             filesprocessed = filesprocessed+1;    %file count
             fprintf('\n This file was processed fully');
             fprintf('\n SAVING');
-            save(sprintf('%s/processed_data_final.mat',path),'Data','-v7.3')
+            save(sprintf('%s/processed_data_gamma_Dec5.mat',path),'Data','-v7.3')
 
             
              clear Data
@@ -248,7 +250,7 @@ for G=1:length(Groups)
            k=k+1;
         end % main try loop
     end % f for loop   
-    save(sprintf('%s/%s/StimSess_final.mat',InDir,Groups{G}),'stimtype','channelinfo','StimSess','TotalONminutes','TotalOFFminutes','throwingerror','lengtherror','diffSR','daterror','filesprocessed','sleeperror','channelerror','stimtype','-v7.3')
+    save(sprintf('%s/%s/StimSess_gamma_Dec5.mat',InDir,Groups{G}),'ONsessbymin','stimtype','channelinfo','StimSess','TotalONminutes','TotalOFFminutes','throwingerror','lengtherror','diffSR','daterror','filesprocessed','sleeperror','channelerror','stimtype','-v7.3')
 end % Groups
 
 

@@ -11,34 +11,34 @@ Devices = {'DeviceNPC700418H','DeviceNPC700412H'};
 %% Load file
 
 for G=1:length(Groups)
-    load(sprintf('%s/%s/StimSess_final.mat',InDir,Groups{G}));
+    load(sprintf('%s/%s/StimSess_gamma_Dec5.mat',InDir,Groups{G}));
     ONfiles  = StimSess(:,1);
     OFFfiles = StimSess(:,2);
     ONfiles =  ONfiles(~cellfun('isempty',ONfiles)); % there are some empty cells, geting rid of em
     OFFfiles = OFFfiles(~cellfun('isempty',OFFfiles)); % there are some empty cells, geting rid of em
 
-    psdout1ON{G} = [];  psdout1OFF{G} = [];
-    psdout2ON{G} = [];  psdout2OFF{G} = [];
-    psdout3ON{G} = [];  psdout3OFF{G} = [];
-    psdout4ON{G} = [];  psdout4OFF{G} = [];
+   
     
     coherence1ON{G} = [];   coherence1OFF{G} = [];
     coherence2ON{G} = [];   coherence2OFF{G} = [];
     coherence3ON{G} = [];   coherence3OFF{G} = [];
 
-
+    psdout1ON{G} = [];  psdout1OFF{G} = [];
+    psdout2ON{G} = [];  psdout2OFF{G} = [];
+    psdout3ON{G} = [];  psdout3OFF{G} = [];
+    psdout4ON{G} = [];  psdout4OFF{G} = [];
     % ON files data
  
 fprintf('\n Printing ON files \n');
 
     
-    for f=14:19
+    for f=[1:3 9 10 15]
         
         try
         FlName = ONfiles{f};
         fprintf('\n Loading file %s from %s',FlName,Groups{G});
         path = sprintf('%s/%s/%s/%s',InDir,Groups{G},FlName,Devices{G});
-        Infile = sprintf('%s/%s/%s/%s/processed_data_final.mat',InDir,Groups{G},FlName,Devices{G});
+        Infile = sprintf('%s/%s/%s/%s/processed_data_gamma.mat',InDir,Groups{G},FlName,Devices{G});
         load(Infile);
 
          psdout1ON{G} = cat(2, psdout1ON{G}(:,:), Data.psd0);
@@ -64,7 +64,7 @@ fprintf('\n Printing ON files \n');
         FlName = OFFfiles{f};
         fprintf('\n Loading file %s from %s',FlName,Groups{G});
         path = sprintf('%s/%s/%s/%s',InDir,Groups{G},FlName,Devices{G});
-        Infile = sprintf('%s/%s/%s/%s/processed_data_final.mat',InDir,Groups{G},FlName,Devices{G});
+        Infile = sprintf('%s/%s/%s/%s/processed_data_gamma.mat',InDir,Groups{G},FlName,Devices{G});
         load(Infile);
         
          psdout1OFF{G} = cat(2, psdout1OFF{G}(:,:), Data.psd0);
@@ -92,50 +92,74 @@ end
 
 %% Coherence plotting
 
-figure; plot(mean(coherence1ON{G}(:,:),2),'linewidth',2);xlim([0 60]); ylim([0 .1]); title(sprintf('Coherence between STN & C1 Group: %s',Groups{G}));xlabel('Frequency (Hz)'); ylabel('Coherence');
-hold on
-plot(mean(coherence1OFF{G}(:,:),2),'linewidth',2);xlim([0 60]); ylim([0 .1]);title(sprintf('Coherence between STN & C1 Group: %s',Groups{G}));xlabel('Frequency (Hz)'); ylabel('Coherence'); legend('on','off')
+figure; plot(mean(coherence1ON{G}(:,:),2),'linewidth',2);xlim([0 90]); ylim([0 .1]); 
+hold on;box off;
+plot(mean(coherence1OFF{G}(:,:),2),'linewidth',2);xlim([0 90]); ylim([0 .1]);
 
-figure; plot(mean(coherence2ON{G}(:,:),2),'linewidth',2);xlim([0 60]);ylim([0 .1]); title(sprintf('Coherence between STN & C2 Group: %s',Groups{G}));xlabel('Frequency (Hz)'); ylabel('Coherence');
-hold on
-plot(mean(coherence2OFF{G}(:,:),2),'linewidth',2);xlim([0 60]);ylim([0 .1]); title(sprintf('Coherence between STN & C2 Group: %s',Groups{G}));xlabel('Frequency (Hz)'); ylabel('Coherence'); legend('on','off')
+figure; plot(mean(coherence2ON{G}(:,:),2),'linewidth',2);xlim([0 90]);ylim([0 .1]); 
+hold on; box off;
+plot(mean(coherence2OFF{G}(:,:),2),'linewidth',2);xlim([0 90]);ylim([0 .1]); 
 
-figure; plot(mean(coherence3ON{G}(:,:),2),'linewidth',2);xlim([0 60]);ylim([0 .1]); title(sprintf('Coherence between C1 & C2 Group: %s',Groups{G}));xlabel('Frequency (Hz)'); ylabel('Coherence');
-hold on
-plot(mean(coherence3OFF{G}(:,:),2),'linewidth',2);xlim([0 60]);ylim([0 .1]); title(sprintf('Coherence between C1 & C2 Group: %s',Groups{G}));xlabel('Frequency (Hz)'); ylabel('Coherence'); legend('on','off')
+figure; plot(mean(coherence3ON{G}(:,:),2),'linewidth',2);xlim([0 90]);ylim([0 .1]); 
+hold on; box off;
+plot(mean(coherence3OFF{G}(:,:),2),'linewidth',2);xlim([0 90]);ylim([0 .1]); 
 
+
+% title(sprintf('Coherence between STN & C1 Group: %s',Groups{G}));
 %% PSD Plotting
 
 options=struct;  % Use once is for initial plot
 options.handle=figure('Position',[800 400 800 400]); %Use once is for initial plot
 
-% 
-% options.color_area = [128 193 219]./255;    % Blue theme
-% options.color_line = [ 52 148 186]./255;
-% options.color_area = [243 169 114]./255;    % Orange theme
-% options.color_line = [236 112  22]./255;
-% options.color_area = rgb('DarkSalmon'); %red
-% options.color_line = rgb('Red');
-% options.color_area = rgb('YellowGreen');    % yellow
-% options.color_line = rgb('YellowGreen');
+c =4;  % change according to plot
 
-options.color_area = rgb('White');    % FOR OFF VALUES
+switch c   
+    case 1
+options.color_area = [128 193 219]./255;    % Blue theme
+options.color_line = [ 52 148 186]./255;
+    case 2
+options.color_area = [243 169 114]./255;    % Orange theme
+options.color_line = [236 112  22]./255;
+    case 3
+options.color_area = rgb('DarkSalmon'); %red
+options.color_line = rgb('Red');
+    case 4
+options.color_area = rgb('YellowGreen');    % yellow
+options.color_line = rgb('Green');
+    case 5
+options.color_area = rgb('red');    % FOR OFF VALUES
 options.color_line = rgb('Black');
+end
 
-options.line_width = 1;
+options.line_width = 1.5;
 options.x_axis= Data.h1(:,1);
 options.error='sem';
-options.alpha= 0.5;
+options.alpha= .5;
 
-plot_areaerrorbar(log10(psdout3OFF{G}(:,:))',options)
-xlabel('Frequency(hz)','Fontsize',10,'Fontname','Arial');
-ylabel('Power (log_1_0\muV^2/Hz)');
-title(sprintf('PSD Stim:ON Group: %s',Groups{G}));   %change
+plot_areaerrorbar(log10(psdout4ON{G}(:,:))',options)
+xlim([0 90]);
+xlabel('','Fontsize',14,'Fontname','Arial');
+% ylabel('Power (log_1_0\muV^2/Hz)');
+%title(sprintf('PSD Stim:ON Group: %s',Groups{G}));   %change
 hold on
 box off
+clear psdout1ON  psdout3ON psdout4ON
 
-legend('','OFF','','.1A','','.3-.5A','','.6A-.7A','','.8A-1.1A') % LEFT
-legend('','.1A','','.3-.5A','','.6A-.8A','','OFF') % RIGHT
+% legend('','OFF','','.1A','','.3-.5A','','.6A-.7A','','.8A-1.1A') % LEFT
+% legend('','.1A','','.3-.5A','','.6A-.8A','','OFF') % RIGHT
+
+%% Transparent Graph plotting
+
+figure;
+for i=1: size(psdout1ON{1,1},2)
+p=plot(log10(psdout1ON{G}(:,i)),'b-');
+p.Color(4) = .25;
+hold on
+end
+title(sprintf('Power Spectrum Density Channel 1 Stim:ON Group: %s',Groups{G}));xlabel('Frequency (Hz)'); ylabel('Power (log_1_0\muV^2/Hz)');
+%figure; plot(log10(mean(psdout1ON{G}(:,:),2)'));
+
+%% Whole Session PLotting
 
 for G=1:length(Groups)
 figure; plot(Data.h1,log10(mean(fftout1.ON{G}(:,:),1)'),'linewidth',2);xlim([0 100]); title(sprintf('Power Spectrum Density Channel 1 Stim:ON Group: %s',Groups{G}));xlabel('Frequency (Hz)'); ylabel('Power (log_1_0\muV^2/Hz)');
