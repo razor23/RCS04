@@ -35,7 +35,7 @@ for G=1:length(Groups)
     throwingerror=0;
     TotalONminutes=0;
     TotalOFFminutes=0;
-    for f = 1:length(masterTableUse.session)
+    for f = 73% 1:length(masterTableUse.session)
         FlName = masterTableUse.session{f};
         fprintf('\n \n Loading file %s from %s',FlName,Groups{G});
         path = sprintf('%s/%s/%s/%s',InDir,Groups{G},FlName,Devices{G});
@@ -252,6 +252,23 @@ for G=1:length(Groups)
     end % f for loop   
     save(sprintf('%s/%s/StimSess_gamma_Dec5.mat',InDir,Groups{G}),'ONsessbymin','stimtype','channelinfo','StimSess','TotalONminutes','TotalOFFminutes','throwingerror','lengtherror','diffSR','daterror','filesprocessed','sleeperror','channelerror','stimtype','-v7.3')
 end % Groups
+
+
+%% Raw LFP and Theta Burst Figure 1
+
+[b,a] = butter(4,[3,7]/(250/2));
+figure;plot(temp0(10000:17500));set(gca,'XTickLabel',0:4:32);box off;set(gca,'fontweight','bold','fontsize',24);
+figure;plot(temp2(10000:17500));set(gca,'XTickLabel',0:4:32);box off;set(gca,'fontweight','bold','fontsize',24);
+figure;plot(temp3(10000:17500));set(gca,'XTickLabel',0:4:32);box off;set(gca,'fontweight','bold','fontsize',24);
+
+x=filtfilt(b,a,temp0(10000:17500));
+y=filtfilt(b,a,temp2(10000:17500));
+z=filtfilt(b,a,temp3(10000:17500));
+
+figure; plot(x); set(gca,'XTickLabel',0:4:32);box off;set(gca,'fontweight','bold','fontsize',24);
+figure; plot(y); set(gca,'XTickLabel',0:4:32);box off;set(gca,'fontweight','bold','fontsize',24);
+figure; plot(z); set(gca,'XTickLabel',0:4:32);box off;set(gca,'fontweight','bold','fontsize',24);
+
 
 
 %% plot check sample code for psd & coherence

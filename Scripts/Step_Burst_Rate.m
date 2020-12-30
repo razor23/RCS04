@@ -264,7 +264,7 @@ for G=1%:length(Groups)
             
           
                 
-                for f=1:length(ONfiles)
+                for f=[1:3 9 10 15]
                     
                       try
                     FlName = ONfiles{f};
@@ -491,29 +491,18 @@ end% Group
 
 %% Stats
 
-[h11 p11] = ttest2((BrateOFF{1,1}(:,1)),(BrateON{1,1}(:,1))); %LEFT
-[h21 p21] = ttest2(rmmissing(BlenOFF{1,1}(:,1)),(rmmissing(BlenON{1,1}(:,1))));   %LEFT
-[h31 p31] = ttest2(rmmissing(BhtOFF{1,1}(:,1)),(rmmissing(BhtON{1,1}(:,1)))); %LEFT
+% Figure 4
 
-[h21 p21] = ttest2((BrateOFF{1,1}(:,2)),(BrateON{1,1}(:,2))); %LEFT
-[h22 p22] = ttest2(rmmissing(BlenOFF{1,1}(:,2)),(rmmissing(BlenON{1,1}(:,2))));   %LEFT
-[h23 p23] = ttest2(rmmissing(BhtOFF{1,1}(:,2)),(rmmissing(BhtON{1,1}(:,2)))); %LEFT
+[h11 p11 c1 stats1] = ttest2((BrateOFF{1,1}(:,1)),(BrateON{1,1}(:,1))); %LEFT
+[h21 p21 c2 stats2] = ttest2((BrateOFF{1,1}(:,2)),(BrateON{1,1}(:,2))); %LEFT
+[h31 p31 c3 stats3 ] = ttest2((BrateOFF{1,1}(:,3)),(BrateON{1,1}(:,3))); %LEFT
 
-[h31 p31] = ttest2((BrateOFF{1,1}(:,3)),(BrateON{1,1}(:,3))); %LEFT
-[h32 p32] = ttest2(rmmissing(BlenOFF{1,1}(:,3)),(rmmissing(BlenON{1,1}(:,3))));   %LEFT
-[h33 p33] = ttest2(rmmissing(BhtOFF{1,1}(:,3)),(rmmissing(BhtON{1,1}(:,3)))); %LEFT
+[h41 p41 c4 stats4] = ttest2((BrateOFF{1,2}(:,1)),(BrateON{1,2}(:,1))); %RIGHT
+[h51 p51 c5 stats5] = ttest2((BrateOFF{1,2}(:,2)),(BrateON{1,2}(:,2))); %RIGHT
+[h61 p61 c6 stats6] = ttest2((BrateOFF{1,2}(:,3)),(BrateON{1,2}(:,3))); %RIGHT
 
 
 
 
-[h34 p34] = ttest2(rmmissing(BrateOFF{1,2}(:,1)),(rmmissing(BrateON{1,2}(:,1)))); %RIGHT
-[h35 p35] = ttest2(rmmissing(BlenOFF{1,2}(:,1)),(rmmissing(BlenON{1,2}(:,1)))); %RIGTH
-[h36 p36] = ttest2(rmmissing(BhtOFF{1,2}(:,1)),(rmmissing(BhtON{1,2}(:,1)))); %RIGHT
 
-[h41 p41] = ttest2(rmmissing(BrateOFF{1,2}(:,2)),(rmmissing(BrateON{1,2}(:,2)))); %RIGHT
-[h42 p42] = ttest2(rmmissing(BlenOFF{1,2}(:,2)),(rmmissing(BlenON{1,2}(:,2)))); %RIGTH
-[h43 p43] = ttest2(rmmissing(BhtOFF{1,2}(:,2),(rmmissing(BhtON{1,2}(:,2))))); %RIGHT
 
-[h51 p51] = ttest2(rmmissing(BrateOFF{1,2}(:,3)),(rmmissing(BrateON{1,2}(:,3)))); %RIGHT
-[h52 p52] = ttest2(rmmissing(BlenOFF{1,2}(:,3)),(rmmissing(BlenON{1,2}(:,3)))); %RIGTH
-[h53 p53] = ttest2(rmmissing(BhtOFF{1,2}(:,3)),(rmmissing(BhtON{1,2}(:,3)))); %RIGHT

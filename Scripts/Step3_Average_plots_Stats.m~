@@ -10,7 +10,7 @@ Devices = {'DeviceNPC700418H','DeviceNPC700412H'};
 
 %% Load file
 
-for G=1:length(Groups)
+for G=1%:length(Groups)
     load(sprintf('%s/%s/StimSess_gamma_Dec5.mat',InDir,Groups{G}));
     ONfiles  = StimSess(:,1);
     OFFfiles = StimSess(:,2);
@@ -38,7 +38,7 @@ fprintf('\n Printing ON files \n');
         FlName = ONfiles{f};
         fprintf('\n Loading file %s from %s',FlName,Groups{G});
         path = sprintf('%s/%s/%s/%s',InDir,Groups{G},FlName,Devices{G});
-        Infile = sprintf('%s/%s/%s/%s/processed_data_gamma.mat',InDir,Groups{G},FlName,Devices{G});
+        Infile = sprintf('%s/%s/%s/%s/processed_data_gamma_Dec5.mat',InDir,Groups{G},FlName,Devices{G});
         load(Infile);
 
          psdout1ON{G} = cat(2, psdout1ON{G}(:,:), Data.psd0);
@@ -64,7 +64,7 @@ fprintf('\n Printing ON files \n');
         FlName = OFFfiles{f};
         fprintf('\n Loading file %s from %s',FlName,Groups{G});
         path = sprintf('%s/%s/%s/%s',InDir,Groups{G},FlName,Devices{G});
-        Infile = sprintf('%s/%s/%s/%s/processed_data_gamma.mat',InDir,Groups{G},FlName,Devices{G});
+        Infile = sprintf('%s/%s/%s/%s/processed_data_gamma_Dec5.mat',InDir,Groups{G},FlName,Devices{G});
         load(Infile);
         
          psdout1OFF{G} = cat(2, psdout1OFF{G}(:,:), Data.psd0);
@@ -111,7 +111,7 @@ plot(mean(coherence3OFF{G}(:,:),2),'linewidth',2);xlim([0 90]);ylim([0 .1]);
 options=struct;  % Use once is for initial plot
 options.handle=figure('Position',[800 400 800 400]); %Use once is for initial plot
 
-c =4;  % change according to plot
+c =5;  % change according to plot
 
 switch c   
     case 1
@@ -127,7 +127,7 @@ options.color_line = rgb('Red');
 options.color_area = rgb('YellowGreen');    % yellow
 options.color_line = rgb('Green');
     case 5
-options.color_area = rgb('red');    % FOR OFF VALUES
+options.color_area = rgb('white');    % FOR OFF VALUES
 options.color_line = rgb('Black');
 end
 
@@ -136,14 +136,14 @@ options.x_axis= Data.h1(:,1);
 options.error='sem';
 options.alpha= .5;
 
-plot_areaerrorbar(log10(psdout4ON{G}(:,:))',options)
+plot_areaerrorbar(log10(psdout4OFF{G}(:,:))',options)
 xlim([0 90]);
-xlabel('','Fontsize',14,'Fontname','Arial');
-% ylabel('Power (log_1_0\muV^2/Hz)');
-%title(sprintf('PSD Stim:ON Group: %s',Groups{G}));   %change
+set(gca,'fontweight','bold','fontsize',24);
 hold on
 box off
-clear psdout1ON  psdout3ON psdout4ON
+% ylabel('Power (log_1_0\muV^2/Hz)');
+%title(sprintf('PSD Stim:ON Group: %s',Groups{G}));   %change
+clear psdout1ON psdout1OFF psdout4ON psdout3ON   psdout3OFF psdout4OFF 
 
 % legend('','OFF','','.1A','','.3-.5A','','.6A-.7A','','.8A-1.1A') % LEFT
 % legend('','.1A','','.3-.5A','','.6A-.8A','','OFF') % RIGHT
@@ -151,12 +151,59 @@ clear psdout1ON  psdout3ON psdout4ON
 %% Transparent Graph plotting
 
 figure;
-for i=1: size(psdout1ON{1,1},2)
+for i=1: size(psdout1ON{1,G},2)
 p=plot(log10(psdout1ON{G}(:,i)),'b-');
-p.Color(4) = .25;
+p.Color(4) = .1;
 hold on
 end
-title(sprintf('Power Spectrum Density Channel 1 Stim:ON Group: %s',Groups{G}));xlabel('Frequency (Hz)'); ylabel('Power (log_1_0\muV^2/Hz)');
+
+figure;
+for i=1: size(psdout3ON{1,G},2)
+p=plot(log10(psdout3ON{G}(:,i)),'b-');
+p.Color(4) = .1;
+hold on
+end
+
+figure;
+for i=1: size(psdout4ON{1,G},2)
+p=plot(log10(psdout4ON{G}(:,i)),'b-');
+p.Color(4) = .1;
+hold on
+end
+
+%% Figure 2 All OFF plots
+
+figure('Position',[800 400 800 400]); 
+plot(mean(log10(psdout4OFF{G}(:,:))')','b','LineWidth',1.5);
+xlim([0 90]);ylim([-8 -4]);
+%hline = findobj(gcf, 'type', 'line');set(hline(1),'LineStyle','.-') %change LineStyle here accordingly
+set(gca,'fontweight','bold','fontsize',24);
+hold on
+box off
+
+
+
+figure('Position',[800 400 800 400]) ; 
+plot(mean(coherence2OFF{G}(:,:),2),'m','LineWidth',1.5);xlim([0 90]);ylim([0 .1]);
+%hline = findobj(gcf, 'type', 'line');set(hline(1),'LineStyle','-.') %change LineStyle here accordingly
+set(gca,'fontweight','bold','fontsize',24);
+hold on; box off;
+
+
+%% Figure 4
+
+figure('Position',[800 400 800 400]) ; 
+plot(mean(coherence2ON{G}(:,:),2),'b','LineWidth',1.5);xlim([0 90]);ylim([0 .1]);
+% hline = findobj(gcf, 'type', 'line');set(hline(1),'LineStyle','-.') %change LineStyle here accordingly
+set(gca,'fontweight','bold','fontsize',24);
+hold on; box off;
+
+
+
+
+
+
+ %title(sprintf('Power Spectrum Density Channel 1 Stim:ON Group: %s',Groups{G}));xlabel('Frequency (Hz)'); ylabel('Power (log_1_0\muV^2/Hz)');
 %figure; plot(log10(mean(psdout1ON{G}(:,:),2)'));
 
 %% Whole Session PLotting
@@ -175,10 +222,26 @@ end
 
 %% Ttests
 
-%LEFT
-[h1 p1] = ttest2(mean(coherence1ON{1}([4:7],:),1),mean(coherence1OFF{1}([4:7],:),1)); % STN M1
-[h2 p2] = ttest2(mean(coherence2ON{1}([4:7],:),1),mean(coherence2OFF{1}([4:7],:),1)); % STN M2
-[h3 p3] = ttest2(mean(coherence3ON{1}([4:7],:),1),mean(coherence3OFF{1}([4:7],:),1)); % M1(+9-8) M2 (+11-10)
+%Figure 4
+% Coherence stats
+
+for s=1:90
+[h1 p1 c1 stats1] = ttest2(coherence1ON{G}(s,:),coherence1OFF{G}(s,:)); % STN M1
+pval1(s,1)=p1*90;
+tval1(s,1)=stats1.tstat;
+[h2 p2 c2 stats2] = ttest2(coherence2ON{G}(s,:),coherence2OFF{G}(s,:)); % STN M2
+pval2(s,1)=p2*90;
+tval2(s,1)=stats2.tstat;
+end
+
+%Figure 3
+
+% stats
+for s=1:90
+[h7 p7 c7 stats7] = ttest2(log10(psdout1ON{G}(s,:)),(log10(psdout1OFF{G}(s,:))));
+[h8 p8 c8 stats8] = ttest2(log10(psdout3ON{G}(s,:)),(log10(psdout3OFF{G}(s,:))));
+[h9 p9 c9 stats9] = ttest2(log10(psdout4ON{G}(s,:)),(log10(psdout4OFF{G}(s,:))));
+end
 
 %RIGHT
 [h4 p4] = ttest(mean(coherence1ON{2}([4:7],:),2),mean(coherence1OFF{2}([4:7],:),2)); %STN M1
@@ -186,8 +249,8 @@ end
 [h6 p6] = ttest(mean(coherence3ON{2}([4:7],:),2),mean(coherence3OFF{2}([4:7],:),2)); % M1(+9-8) M2 (+11-10)
 
 
-[h7 p7] = ttest(mean(log10(psdout1ON{G}([4:7],:)),2),mean(log10(psdout1ON{G}([4:7],:)),2));
-[h8 p8] = ttest(mean(log10(psdout1ON{G}([4:7],:)),2),mean(log10(psdout1ON{G}([4:7],:)),2));
-[h9 p9] = ttest(mean(log10(psdout1ON{G}([4:7],:)),2),mean(log10(psdout1ON{G}([4:7],:)),2));
+[h7 p7] = ttest(mean(log10(psdout1ON{G}([4:7],:)),2),mean(log10(psdout1OFF{G}([4:7],:)),2));
+[h8 p8] = ttest(mean(log10(psdout3ON{G}([4:7],:)),2),mean(log10(psdout3OFF{G}([4:7],:)),2));
+[h9 p9] = ttest(mean(log10(psdout4ON{G}([4:7],:)),2),mean(log10(psdout4OFF{G}([4:7],:)),2));
 
 
